@@ -1,10 +1,11 @@
-# Project Name
+# ChatGPT Gilab Code Review CI/CD
 
-This project is a code review pipeline that runs on GitLab CI, incorporating a Python script to analyze changes in source code and perform automated checks.
+This project is a code review pipeline that runs on GitLab CI, incorporating a Python script to analyze changes in source code with ChatGPT API and generates a report in the artifacts.
 
 ## Prerequisites
 - Docker Runner
 - GitLab CI/CD
+- ChatGPT API Key
 
 ## Structure
 
@@ -36,6 +37,7 @@ The pipeline is configured to continue even if the `check_code.py` script fails 
 
 ## Installation
 - To properly run the script you need an OPENAI_API_KEY Key defined in the CI/CD Settings Variables. The script will use this as default
+- You should at least mark the key as Protected and Masked
 
 ## Usage
 
@@ -50,5 +52,5 @@ The pipeline is configured to continue even if the `check_code.py` script fails 
 
 ## License
 
-This project is licensed under MIT License.
+This project is released under the [MIT License](https://opensource.org/licenses/MIT).
 

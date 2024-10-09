@@ -1,0 +1,28 @@
+stages:
+  - code_check
+
+code_check:
+  stage: code_check
+  image: python:3.9
+  script:
+    - pip install openai requests
+    # Sammle alle geänderten Dateien in der aktuellen Pipeline (verschiedene Quellcode-Dateitypen)
+    - export CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA | grep -E '\.(py|js|jsx|ts|tsx|java|cpp|c|h|hpp|cs|go|rb|php|swift|kt|scala|rs|dart|vue|html|css|scss|sql|sh|bash|yaml|yml|json|xml|md|txt)$')
+    # Erstelle eine temporäre Datei mit den Diffs
+    - git diff $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA $CHANGED_FILES > changes.diff
+    # Führe das Skript mit den geänderten Dateien und dem Diff aus
+    - python check_code.py "$CHANGED_FILES" changes.diff || EXIT_CODE=$?
+    - exit $EXIT_CODE
+  artifacts:
+    reports:
+      junit: code_check_results.xml   
+    paths:
+      - code_check_results.xml
+    when: always
+    expire_in: 1 week
+  allow_failure:
+    exit_codes:
+      - 2
+      - 3
+  variables:
+    CODE_CHECK_RESULT: ${RESULT}
